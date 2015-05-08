@@ -49,6 +49,21 @@ class Outmost {
 
 }
 
+class Capture {
+  var n: Int = 0
+
+  def makeClosure() = { () => { n += 1; println(n) }}
+
+  def test(): Unit = {
+    val arr = new Array[()=>Unit](2)
+    (0 until arr.length).foreach(arr(_) = makeClosure())
+    //Capture by reference
+    //1
+    //2
+    arr.foreach(_())
+  }
+}
+
 object Closure {
   def main(args: Array[String]):Unit = {
     val outmost = new Outmost
@@ -56,5 +71,9 @@ object Closure {
     val inner = new outer.Inner
     inner.innerF(0 to 9)
     inner.innerF2(0 to 9)
+
+    val c = new Capture
+    c.test()
+    println(c.n)
   }
 }
