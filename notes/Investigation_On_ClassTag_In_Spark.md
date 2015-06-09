@@ -1,6 +1,6 @@
 # Spark中ClassTag的一个用法探究
 
-@(Scala)[spark|反射|ClassTag|范型]
+[Scala|spark|反射|ClassTag|范型]
 
 在阅读spark源码时看到下面一段内容：
 ```scala
