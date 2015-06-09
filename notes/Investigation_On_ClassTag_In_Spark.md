@@ -10,11 +10,11 @@ class RangePartitioner[K : Ordering : ClassTag, V]
 其中**[K : Ordering : ClassTag]**这样的语法结构头一次见到，很奇怪它的作用究竟是什么。
 
 首先，**[K : ClassTag]**这种用法并不新鲜，在Scala ClassTag这个trait的注释中已经给了主要的使用场景：
->    scala> def mkArray[T : ClassTag](elems: T*) = Array[T](elems: _*)
->   mkArray: [T](elems: T*)(implicit evidence$1: scala.reflect.ClassTag[T])Array[T]
+>  scala> def mkArray[T : ClassTag](elems: T*) = Array[T](elems: _*)
+>  mkArray: [T](elems: T*)(implicit evidence$1: scala.reflect.ClassTag[T])Array[T]
 >
->   scala> mkArray(42, 13)
->   res0: Array[Int] = Array(42, 13)
+>  scala> mkArray(42, 13)
+>  res0: Array[Int] = Array(42, 13)
 >
 >  scala> mkArray("Japan","Brazil","Germany")
 >  res1: Array[String] = Array(Japan, Brazil, Germany)
@@ -63,9 +63,9 @@ object Test {
 ```
 
 简单来说，这个过程是这样子的：
-1. 按前所述，编译器会在mkArray的签名中增加一个implicit parameter来携带编译期T的具体类型。
-2. 调用mkArray时，如mkArray(42, 13)，编译器会在调用语句上加一个ClassTag[Int]值来携带编译期的Int这个类型。这个值会与implicit parameter匹配并最终被传到Array.apply中。
-3. Array.apply方法，即上面的copiedArrayApply方法，会使用传进来的ClassTag[Int].newArray(...)来创建数组。通过这一系列步骤，程序员可以绕过java里不能通过范型直接创建数组的限制，比如T[] arr = new T[10]在java里不允许的。
+1.  按前所述，编译器会在mkArray的签名中增加一个implicit parameter来携带编译期T的具体类型。
+2.  调用mkArray时，如mkArray(42, 13)，编译器会在调用语句上加一个ClassTag[Int]值来携带编译期的Int这个类型。这个值会与implicit parameter匹配并最终被传到Array.apply中。
+3.  Array.apply方法，即上面的copiedArrayApply方法，会使用传进来的ClassTag[Int].newArray(...)来创建数组。通过这一系列步骤，程序员可以绕过java里不能通过范型直接创建数组的限制，比如T[] arr = new T[10]在java里不允许的。
 
 当然除了解决范型数组创建的问题，ClassTag应该还有其他作用，并且ClassTag只是TypeTag的一个弱化形式，这里就先不展开讨论了。
 
